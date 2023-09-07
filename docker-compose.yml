@@ -1,0 +1,23 @@
+version: '3.3'
+
+services:
+  app:
+    build: .
+    container_name: teufel-app
+    restart: always
+    working_dir: /var/www/
+    volumes:
+      - ./src/:/var/www/src
+      - ./dist/:/var/www/dist
+      - ./tests/:/var/www/tests
+      - ./phpunit.xml:/var/www/phpunit.xml
+      - ./vendor/:/var/www/vendor:cached
+      - ./coverage/:/var/www/coverage:delegated
+  coverage:
+    image: nginx:1.19-alpine
+    container_name: teufel-coverage
+    restart: always
+    ports:
+      - 3000:80
+    volumes:
+      - ./coverage/:/usr/share/nginx/html
